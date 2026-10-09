@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>麥當勞公會｜楓之谷經典版</title>
+  <meta name="description" content="楓之谷經典版「麥當勞」公會專屬板塊：成員介紹與招募。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #da291c;
+      --red-dark: #a51d13;
+      --yellow: #ffc72c;
+      --yellow-soft: #fff4d1;
+      --ink: #1b1210;
+      --cream: #fffaf0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Noto Sans TC", system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--cream);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+
+    /* ---------- 飄落特效 ---------- */
+    .fall-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .falling {
+      position: absolute;
+      top: -60px;
+      animation: fall linear forwards;
+      opacity: .85;
+      user-select: none;
+    }
+    @keyframes fall {
+      to { transform: translate(var(--drift), 110vh) rotate(var(--spin)); }
+    }
+
+    /* ---------- 導覽列 ---------- */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 20px;
+      background: rgba(165, 29, 19, .9);
+      backdrop-filter: blur(6px);
+      border-bottom: 3px solid var(--yellow);
+      transform: translateY(-100%);
+      transition: transform .3s;
+    }
+    nav.show { transform: translateY(0); }
+    nav .brand { font-weight: 900; color: var(--yellow); text-decoration: none; font-size: 1.15rem; }
+    nav ul { list-style: none; display: flex; gap: 18px; }
+    nav ul a { text-decoration: none; font-weight: 700; font-size: .95rem; }
+    nav ul a:hover { color: var(--yellow); }
+
+    /* ---------- 主視覺 ---------- */
+    .hero {
+      position: relative; z-index: 1;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 40px 16px;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255, 199, 44, .35), transparent 60%),
+        linear-gradient(160deg, var(--red) 0%, var(--red-dark) 100%);
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute; inset: -50%;
+      background: repeating-conic-gradient(from 0deg, rgba(255,199,44,.08) 0 10deg, transparent 10deg 20deg);
+      animation: rays 40s linear infinite;
+    }
+    @keyframes rays { to { transform: rotate(360deg); } }
+    .hero > * { position: relative; }
+    .badge {
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: var(--yellow);
+      color: var(--red);
+      display: grid; place-items: center;
+      font-size: 64px; font-weight: 900;
+      box-shadow: 0 0 0 8px rgba(255,255,255,.15), 0 10px 30px rgba(0,0,0,.35);
+      animation: bob 3s ease-in-out infinite;
+      margin-bottom: 24px;
+    }
+    @keyframes bob { 50% { transform: translateY(-12px) rotate(-4deg); } }
+    .hero .tag {
+      display: inline-block;
+      background: var(--ink); color: var(--yellow);
+      padding: 4px 14px; border-radius: 999px;
+      font-size: .9rem; font-weight: 700; letter-spacing: .1em;
+      margin-bottom: 12px;
+    }
+    .hero h1 {
+      font-size: clamp(3.5rem, 14vw, 8rem);
+      font-weight: 900;
+      color: var(--yellow);
+      line-height: 1.05;
+      text-shadow: 4px 4px 0 var(--red-dark), 8px 8px 0 rgba(0,0,0,.25);
+      letter-spacing: .05em;
+    }
+    .hero h1 span { display: inline-block; animation: wave 2.4s ease-in-out infinite; }
+    .hero h1 span:nth-child(2) { animation-delay: .15s; }
+    .hero h1 span:nth-child(3) { animation-delay: .3s; }
+    @keyframes wave { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-14px); } }
+    .slogan { font-size: clamp(1.1rem, 4vw, 1.5rem); font-weight: 700; margin: 18px 0 32px; }
+    .btn {
+      display: inline-block;
+      background: var(--yellow); color: var(--red);
+      font-weight: 900; font-size: 1.15rem;
+      padding: 14px 36px; border-radius: 999px;
+      text-decoration: none;
+      box-shadow: 0 6px 0 #c9971a;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .btn:hover { transform: translateY(-3px); box-shadow: 0 9px 0 #c9971a; }
+    .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #c9971a; }
+    .scroll-hint { position: absolute; bottom: 24px; font-size: 1.6rem; animation: bob 1.6s ease-in-out infinite; }
+
+    /* ---------- 區塊共用 ---------- */
+    section { position: relative; z-index: 1; padding: 90px 16px; }
+    .wrap { max-width: 1080px; margin: 0 auto; }
+    .section-title { text-align: center; margin-bottom: 48px; }
+    .section-title small { color: var(--yellow); font-weight: 700; letter-spacing: .3em; }
+    .section-title h2 { font-size: clamp(2rem, 6vw, 2.8rem); font-weight: 900; }
+    .section-title h2::after {
+      content: ""; display: block;
+      width: 80px; height: 6px; margin: 10px auto 0;
+      background: linear-gradient(90deg, var(--red), var(--yellow));
+      border-radius: 3px;
+    }
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity .7s, transform .7s; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ---------- 公會簡介 ---------- */
+    .about { background: var(--ink); }
+    .about p.lead { text-align: center; max-width: 640px; margin: 0 auto 40px; font-size: 1.1rem; color: #f3e6d0; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+    .stat {
+      background: linear-gradient(160deg, #2a1b17, #20130f);
+      border: 2px solid rgba(255,199,44,.35);
+      border-radius: 18px;
+      padding: 28px 16px; text-align: center;
+    }
+    .stat .num { font-size: 2.6rem; font-weight: 900; color: var(--yellow); }
+    .stat .label { color: #e5d3b5; font-weight: 700; }
+
+    /* ---------- 成員菜單 ---------- */
+    .menu {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(255,199,44,.12), transparent 40%),
+        linear-gradient(180deg, var(--red-dark), var(--red));
+    }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; }
+    .card { perspective: 1000px; }
+    .card-inner {
+      position: relative;
+      background: var(--cream); color: var(--ink);
+      border-radius: 22px;
+      padding: 20px 20px 24px;
+      box-shadow: 0 14px 0 rgba(0,0,0,.18), 0 20px 40px rgba(0,0,0,.25);
+      transition: transform .25s ease, box-shadow .25s ease;
+      transform-style: preserve-3d;
+      height: 100%;
+    }
+    .card:hover .card-inner { box-shadow: 0 18px 0 rgba(0,0,0,.18), 0 0 40px rgba(255,199,44,.75); }
+    .card .ribbon {
+      position: absolute; top: 16px; right: -8px;
+      background: var(--red); color: var(--yellow);
+      font-weight: 900; font-size: .85rem;
+      padding: 4px 14px;
+      border-radius: 6px 0 0 6px;
+      box-shadow: 0 3px 0 var(--red-dark);
+    }
+    .tray {
+      background: repeating-linear-gradient(45deg, var(--yellow) 0 14px, #ffd65c 14px 28px);
+      border-radius: 16px;
+      padding: 18px;
+      display: flex; justify-content: center;
+      border: 4px solid var(--red);
+    }
+    .tray img {
+      width: 177px; height: auto;
+      image-rendering: pixelated;
+      border-radius: 6px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.25);
+      transition: transform .3s;
+    }
+    .card:hover .tray img { transform: translateY(-6px) scale(1.04); }
+    .card h3 { font-size: 1.5rem; font-weight: 900; margin: 16px 0 6px; color: var(--red); }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .chip {
+      background: var(--yellow-soft); color: var(--red-dark);
+      border: 1.5px solid var(--yellow);
+      font-size: .8rem; font-weight: 700;
+      padding: 2px 10px; border-radius: 999px;
+    }
+    .card p { font-size: 1rem; color: #3a2a22; }
+    .card .combo {
+      margin-top: 14px; padding-top: 12px;
+      border-top: 2px dashed #e8d5a8;
+      font-size: .9rem; font-weight: 700; color: var(--red-dark);
+    }
+
+    /* ---------- 跑馬燈 ---------- */
+    .marquee {
+      position: relative; z-index: 1;
+      background: var(--yellow); color: var(--red);
+      font-weight: 900; font-size: 1.2rem;
+      overflow: hidden; white-space: nowrap;
+      padding: 12px 0;
+      border-block: 4px solid var(--ink);
+    }
+    .marquee .track { display: inline-block; animation: scroll 22s linear infinite; }
+    @keyframes scroll { to { transform: translateX(-50%); } }
+
+    /* ---------- 招募 ---------- */
+    .recruit { background: var(--ink); }
+    .recruit-box {
+      background: var(--yellow); color: var(--red);
+      border-radius: 28px;
+      padding: 48px 24px; text-align: center;
+      box-shadow: 0 14px 0 #c9971a;
+      position: relative; overflow: hidden;
+    }
+    .recruit-box h2 { font-size: clamp(2rem, 7vw, 3.2rem); font-weight: 900; line-height: 1.2; }
+    .recruit-box p { color: var(--ink); font-size: 1.1rem; margin: 14px auto 28px; max-width: 560px; }
+    .perks { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 32px; }
+    .perk { background: var(--cream); color: var(--ink); border-radius: 14px; padding: 16px; font-weight: 700; }
+    .perk b { display: block; font-size: 1.8rem; }
+    .recruit-box .btn { background: var(--red); color: var(--yellow); box-shadow: 0 6px 0 var(--red-dark); }
+    .recruit-box .btn:hover { box-shadow: 0 9px 0 var(--red-dark); }
+
+    footer {
+      position: relative; z-index: 1;
+      text-align: center; padding: 32px 16px;
+      background: #120c0a; color: #b9a58a; font-size: .85rem;
+    }
+    footer strong { color: var(--yellow); }
+
+    @media (max-width: 560px) {
+      nav ul { gap: 12px; }
+      nav ul a { font-size: .85rem; }
+      section { padding: 70px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="fall-layer" id="fallLayer" aria-hidden="true"></div>
+
+  <nav id="nav">
+    <a class="brand" href="#top">🍟 麥當勞公會</a>
+    <ul>
+      <li><a href="#about">公會簡介</a></li>
+      <li><a href="#menu">成員菜單</a></li>
+      <li><a href="#recruit">加入我們</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="badge">M</div>
+    <span class="tag">楓之谷經典版 · 公會</span>
+    <h1><span>麥</span><span>當</span><span>勞</span></h1>
+    <p class="slogan">歡迎光臨！今天要來點楓葉套餐嗎？🍁🍔</p>
+    <a class="btn" href="#recruit">我要點餐（加入公會）</a>
+    <div class="scroll-hint">⬇</div>
+  </header>
+
+  <section class="about" id="about">
+    <div class="wrap">
+      <div class="section-title reveal">
+        <small>ABOUT US</small>
+        <h2>公會簡介</h2>
+      </div>
+      <p class="lead reveal">
+        我們是楓之谷經典版的「麥當勞」公會，練功、打王、聊天樣樣來。
+        在這裡每個人都是一份獨一無二的套餐，歡迎你一起加入我們的廚房！
+      </p>
+      <div class="stats">
+        <div class="stat reveal"><div class="num" data-count="3">3</div><div class="label">公會成員</div></div>
+        <div class="stat reveal"><div class="num" data-count="100" data-suffix="+">100+</div><div class="label">最高等級</div></div>
+        <div class="stat reveal"><div class="num">24h</div><div class="label">營業中，隨時歡迎</div></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track" id="marqueeTrack"></div>
+  </div>
+
+  <section class="menu" id="menu">
+    <div class="wrap">
+      <div class="section-title reveal">
+        <small>TODAY'S MENU</small>
+        <h2>今日菜單・成員介紹</h2>
+      </div>
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <section class="recruit" id="recruit">
+    <div class="wrap">
+      <div class="recruit-box reveal">
+        <h2>麥當勞 歡迎你上班！🍔</h2>
+        <p>不管你是新手小薯還是百等大麥克，只要喜歡一起冒險、一起聊天，這裡都有你的位置。</p>
+        <div class="perks">
+          <div class="perk"><b>🍁</b>一起練功升等</div>
+          <div class="perk"><b>⚔️</b>組隊打王</div>
+          <div class="perk"><b>💬</b>輕鬆聊天不壓力</div>
+        </div>
+        <a class="btn" href="#menu">遊戲內密語會長「小鮮乳」</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>© <span id="year"></span> <strong>麥當勞公會</strong> · 楓之谷經典版</p>
+    <p>本站為玩家公會粉絲頁，與麥當勞企業及遊戲官方無關。</p>
+  </footer>
+
+  <script>
+    // 成員資料：新增成員只要在這裡多加一筆
+    const members = [
+      {
+        name: "小鮮乳",
+        img: "images/fresh-milk.png",
+        ribbon: "會長",
+        tags: ["公會長", "老闆"],
+        intro: "麥當勞公會長，是老闆，老闆!!!",
+        combo: "🥛 招牌：老闆特調鮮乳"
+      },
+      {
+        name: "羽碎",
+        img: "images/yusui.png",
+        ribbon: "Lv.100",
+        tags: ["冰雷大巫師", "百等"],
+        intro: "麥當勞第一百等套餐，冰雷大巫師!",
+        combo: "⚡ 招牌：百等電猴大套餐"
+      },
+      {
+        name: "張加檸檬綠茶",
+        img: "images/lemon-tea.png",
+        ribbon: "即將百等",
+        tags: ["百等衝刺中"],
+        intro: "即將邁入百等里程碑，專屬飲料是檸檬紅茶。",
+        combo: "🍋 招牌：檸檬紅茶（大杯）"
+      }
+    ];
+
+    const cards = document.getElementById("cards");
+    members.forEach(m => {
+      const el = document.createElement("article");
+      el.className = "card reveal";
+      el.innerHTML = `
+        <div class="card-inner">
+          <span class="ribbon">${m.ribbon}</span>
+          <div class="tray"><img src="${m.img}" alt="${m.name} 的角色圖"></div>
+          <h3>${m.name}</h3>
+          <div class="chips">${m.tags.map(t => `<span class="chip">${t}</span>`).join("")}</div>
+          <p>${m.intro}</p>
+          <div class="combo">${m.combo}</div>
+        </div>`;
+      cards.appendChild(el);
+    });
+
+    // 卡片滑鼠傾斜
+    document.querySelectorAll(".card").forEach(card => {
+      const inner = card.querySelector(".card-inner");
+      card.addEventListener("mousemove", e => {
+        const r = card.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        inner.style.transform = `translateY(-8px) rotateY(${x * 12}deg) rotateX(${-y * 12}deg)`;
+      });
+      card.addEventListener("mouseleave", () => { inner.style.transform = ""; });
+    });
+
+    // 跑馬燈
+    const words = ["🍟 麥當勞公會招生中", "🍁 楓之谷經典版", ...members.map(m => "⭐ " + m.name), "🍔 歡迎光臨"];
+    const line = words.join("　　") + "　　";
+    document.getElementById("marqueeTrack").textContent = line + line;
+
+    // 捲動淡入 + 數字跳動
+    const countUp = el => {
+      const target = +el.dataset.count, suffix = el.dataset.suffix || "";
+      const start = performance.now();
+      const step = now => {
+        const p = Math.min((now - start) / 1200, 1);
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + (p === 1 ? suffix : "");
+        if (p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    };
+    const io = new IntersectionObserver(entries => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const siblings = [...el.parentElement.children].filter(c => c.classList.contains("reveal"));
+        el.style.transitionDelay = siblings.indexOf(el) * 0.12 + "s";
+        el.classList.add("in");
+        const num = el.querySelector("[data-count]");
+        if (num) countUp(num);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+    // 導覽列：離開主視覺後出現
+    const nav = document.getElementById("nav");
+    addEventListener("scroll", () => nav.classList.toggle("show", scrollY > innerHeight * 0.6), { passive: true });
+
+    // 飄落的楓葉和薯條
+    const layer = document.getElementById("fallLayer");
+    const items = ["🍁", "🍁", "🍁", "🍟", "🍔"];
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function drop() {
+      const s = document.createElement("span");
+      s.className = "falling";
+      s.textContent = items[Math.floor(Math.random() * items.length)];
+      s.style.left = Math.random() * 100 + "vw";
+      s.style.fontSize = 14 + Math.random() * 20 + "px";
+      s.style.setProperty("--drift", (Math.random() * 200 - 100) + "px");
+      s.style.setProperty("--spin", (Math.random() * 720 - 360) + "deg");
+      s.style.animationDuration = 7 + Math.random() * 6 + "s";
+      layer.appendChild(s);
+      s.addEventListener("animationend", () => s.remove());
+    }
+    if (!reduce) setInterval(drop, 700);
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
