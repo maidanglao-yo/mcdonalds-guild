@@ -287,7 +287,7 @@
         在這裡每個人都是一份獨一無二的套餐，歡迎你一起加入我們的廚房！
       </p>
       <div class="stats">
-        <div class="stat reveal"><div class="num" data-count="3">3</div><div class="label">公會成員</div></div>
+        <div class="stat reveal"><div class="num" id="memberCount" data-count="3">3</div><div class="label">公會成員</div></div>
         <div class="stat reveal"><div class="num" data-count="100" data-suffix="+">100+</div><div class="label">最高等級</div></div>
         <div class="stat reveal"><div class="num">24h</div><div class="label">營業中，隨時歡迎</div></div>
       </div>
@@ -364,6 +364,10 @@
         combo: "🥛 招牌：等等想"
       }
     ];
+
+    // 公會成員數：自動等於上面成員清單的人數
+    const memberCount = document.getElementById("memberCount");
+    memberCount.dataset.count = memberCount.textContent = members.length;
 
     const cards = document.getElementById("cards");
     members.forEach(m => {
