@@ -2,7 +2,7 @@
 
 楓之谷經典版「麥當勞」公會專屬網頁：公會簡介、成員介紹與招募宣傳。
 
-網址（開啟 GitHub Pages 後）：https://huia7421-droid.github.io/mcdonalds-guild/
+網址（開啟 GitHub Pages 後）：https://maidanglao-yo.github.io/mcdonalds-guild/
 
 ## 檔案
 - `index.html`：整個網頁（純 HTML/CSS/JS，不需要伺服器，直接用瀏覽器開啟即可）
