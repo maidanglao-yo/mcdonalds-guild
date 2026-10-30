@@ -57,6 +57,52 @@
     nav ul { list-style: none; display: flex; gap: 18px; }
     nav ul a { text-decoration: none; font-weight: 700; font-size: .95rem; }
     nav ul a:hover { color: var(--yellow); }
+    nav ul li { position: relative; }
+
+    /* 下拉選單 */
+    .drop-btn {
+      background: none; border: 0; color: inherit; cursor: pointer;
+      font: inherit; font-weight: 700; font-size: .95rem;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .drop-btn:hover { color: var(--yellow); }
+    .drop-btn .caret { font-size: .7em; transition: transform .2s; }
+    .dropdown {
+      position: absolute; top: calc(100% + 12px); left: 50%;
+      min-width: 140px;
+      list-style: none;
+      display: block !important;
+      background: var(--cream);
+      border: 3px solid var(--yellow);
+      border-radius: 14px;
+      padding: 6px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.35);
+      opacity: 0; visibility: hidden;
+      transform: translate(-50%, -6px);
+      transition: opacity .2s, transform .2s, visibility .2s;
+    }
+    .dropdown::before {
+      content: ""; position: absolute; top: -9px; left: 50%;
+      width: 14px; height: 14px; background: var(--cream);
+      border-left: 3px solid var(--yellow); border-top: 3px solid var(--yellow);
+      transform: translateX(-50%) rotate(45deg);
+    }
+    .dropdown a {
+      display: block; position: relative;
+      padding: 8px 14px; border-radius: 9px;
+      color: var(--red-dark); white-space: nowrap;
+    }
+    .dropdown a:hover { background: var(--yellow); color: var(--red); }
+    .has-drop.open .dropdown {
+      opacity: 1; visibility: visible; transform: translate(-50%, 0);
+    }
+    .has-drop.open .caret { transform: rotate(180deg); }
+    @media (hover: hover) {
+      .has-drop:hover .dropdown { opacity: 1; visibility: visible; transform: translate(-50%, 0); }
+      .has-drop:hover .caret { transform: rotate(180deg); }
+      /* 讓滑鼠從按鈕移到選單時不會中斷 */
+      .has-drop::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 14px; }
+    }
 
     /* ---------- 主視覺 ---------- */
     .hero {
@@ -237,6 +283,199 @@
     .recruit-box .btn { background: var(--red); color: var(--yellow); box-shadow: 0 6px 0 var(--red-dark); }
     .recruit-box .btn:hover { box-shadow: 0 9px 0 var(--red-dark); }
 
+    /* ---------- 公會規章 ---------- */
+    .rules {
+      background:
+        radial-gradient(circle at 85% 0%, rgba(218,41,28,.25), transparent 45%),
+        #20140f;
+    }
+    .rules-intro { text-align: center; max-width: 640px; margin: 0 auto 36px; color: #f3e6d0; font-size: 1.05rem; }
+    .rule-tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 28px; flex-wrap: wrap; }
+    .rule-tab {
+      background: transparent; color: var(--yellow);
+      border: 2px solid var(--yellow); border-radius: 999px;
+      padding: 8px 22px; font: inherit; font-weight: 900; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .rule-tab[aria-selected="true"], .rule-tab:hover { background: var(--yellow); color: var(--red); }
+    .rule-panel[hidden] { display: none; }
+    .rule-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 22px; }
+    .rule-card {
+      background: var(--cream); color: var(--ink);
+      border-radius: 20px;
+      padding: 22px 22px 20px;
+      border-top: 8px solid var(--red);
+      box-shadow: 0 10px 0 rgba(0,0,0,.25);
+    }
+    .rule-card h3 {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.2rem; font-weight: 900; color: var(--red); margin-bottom: 12px;
+    }
+    .rule-card h3 .no {
+      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      background: var(--yellow); color: var(--red);
+      display: grid; place-items: center; font-size: 1rem;
+    }
+    .rule-card ul { list-style: none; display: grid; gap: 8px; }
+    .rule-card li { position: relative; padding-left: 24px; color: #3a2a22; }
+    .rule-card li::before { content: "🍟"; position: absolute; left: 0; top: 0; font-size: .85rem; }
+    .rule-card.note {
+      background: var(--yellow); border-top-color: var(--ink);
+      display: flex; flex-direction: column; justify-content: center; text-align: center;
+      transform: rotate(-1.5deg);
+    }
+    .rule-card.note h3 { justify-content: center; color: var(--ink); }
+    .rule-card.note h3 .no { background: var(--red); color: var(--yellow); }
+    .rule-card.note p { font-size: 1.6rem; font-weight: 900; color: var(--red); }
+    .visitor-box {
+      max-width: 760px; margin: 0 auto;
+      background: var(--cream); color: var(--ink);
+      border-radius: 24px; padding: 30px 26px;
+      border: 4px dashed var(--yellow);
+    }
+    .visitor-box .rule-card { box-shadow: none; border-top: 0; padding: 0; }
+    .visitor-box .welcome { text-align: center; font-weight: 700; color: var(--red-dark); margin-bottom: 18px; }
+
+    /* ---------- 活動紀錄 ---------- */
+    .events { background: var(--ink); }
+    .carousel { position: relative; }
+    .event-track {
+      display: flex; gap: 24px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      padding: 8px 4px 28px;
+      scrollbar-width: thin; scrollbar-color: var(--yellow) transparent;
+    }
+    .event-track::-webkit-scrollbar { height: 8px; }
+    .event-track::-webkit-scrollbar-thumb { background: var(--yellow); border-radius: 4px; }
+    .event-card {
+      flex: 0 0 min(340px, 82vw);
+      scroll-snap-align: start;
+      background: var(--cream); color: var(--ink);
+      border-radius: 22px; overflow: hidden;
+      box-shadow: 0 12px 0 rgba(0,0,0,.35);
+      display: flex; flex-direction: column;
+      cursor: pointer;
+      border: 0; padding: 0; text-align: left; font: inherit;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .event-card:hover, .event-card:focus-visible {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 0 rgba(0,0,0,.35), 0 0 36px rgba(255,199,44,.6);
+      outline: none;
+    }
+    .event-cover {
+      position: relative; aspect-ratio: 16 / 9; width: 100%;
+      background: repeating-linear-gradient(45deg, var(--yellow) 0 14px, #ffd65c 14px 28px);
+      overflow: hidden;
+    }
+    .event-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .img-missing {
+      position: absolute; inset: 0;
+      display: grid; place-items: center; text-align: center;
+      color: var(--red); font-weight: 900; font-size: 1.05rem;
+    }
+    .img-missing span { display: block; font-size: 2.6rem; }
+    .event-cover .ep {
+      position: absolute; top: 12px; left: 12px;
+      background: var(--red); color: var(--yellow);
+      font-weight: 900; font-size: .8rem; padding: 3px 12px; border-radius: 999px;
+    }
+    .event-cover .yt-badge {
+      position: absolute; bottom: 10px; right: 10px;
+      background: rgba(0,0,0,.75); color: #fff;
+      font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 6px;
+    }
+    .event-body { padding: 16px 20px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
+    .event-body .date { font-size: .85rem; font-weight: 700; color: #9a7a55; }
+    .event-body h3 { font-size: 1.35rem; font-weight: 900; color: var(--red); line-height: 1.3; }
+    .event-body p { color: #3a2a22; font-size: .95rem; }
+    .event-body .more { margin-top: auto; padding-top: 8px; font-weight: 900; color: var(--red-dark); }
+    .event-card.soon { cursor: default; background: transparent; border: 3px dashed rgba(255,199,44,.5); box-shadow: none; }
+    .event-card.soon:hover { transform: none; box-shadow: none; }
+    .event-card.soon .event-body { justify-content: center; align-items: center; text-align: center; color: var(--yellow); }
+    .event-card.soon .event-body span { font-size: 3rem; }
+    .event-card.soon h3 { color: var(--yellow); }
+    .event-card.soon p { color: #e5d3b5; }
+    .car-btn {
+      position: absolute; top: 40%; z-index: 2;
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 3px solid var(--ink);
+      background: var(--yellow); color: var(--red);
+      font-size: 1.3rem; font-weight: 900; cursor: pointer;
+      box-shadow: 0 4px 0 #c9971a;
+      transition: opacity .2s;
+    }
+    .car-btn.prev { left: -14px; }
+    .car-btn.next { right: -14px; }
+    .car-btn:disabled { opacity: 0; pointer-events: none; }
+
+    /* 活動詳細視窗 */
+    .event-dialog {
+      width: min(860px, calc(100vw - 24px));
+      max-height: calc(100vh - 24px);
+      margin: auto;
+      border: 4px solid var(--yellow);
+      border-radius: 24px;
+      background: var(--cream); color: var(--ink);
+      padding: 0; overflow: auto;
+    }
+    .event-dialog::backdrop { background: rgba(20, 10, 8, .8); backdrop-filter: blur(3px); }
+    .dlg-head {
+      position: sticky; top: 0; z-index: 2;
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      background: var(--red); color: var(--yellow);
+      padding: 12px 18px;
+    }
+    .dlg-head h3 { font-size: 1.25rem; font-weight: 900; }
+    .dlg-close {
+      flex: none; width: 36px; height: 36px; border-radius: 50%;
+      border: 0; background: var(--yellow); color: var(--red);
+      font-size: 1.2rem; font-weight: 900; cursor: pointer;
+    }
+    .dlg-body { padding: 20px; display: grid; gap: 22px; }
+    .dlg-body h4 { font-size: 1.05rem; font-weight: 900; color: var(--red); margin-bottom: 10px; }
+    .dlg-meta { color: #9a7a55; font-weight: 700; font-size: .9rem; }
+    .dlg-desc { color: #3a2a22; white-space: pre-line; }
+    .video-wrap {
+      position: relative; aspect-ratio: 16 / 9; border-radius: 14px; overflow: hidden;
+      background: #000;
+    }
+    .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .yt-link {
+      display: inline-block; margin-top: 10px;
+      background: var(--red); color: #fff; text-decoration: none;
+      font-weight: 900; font-size: .9rem; padding: 8px 18px; border-radius: 999px;
+    }
+    .viewer {
+      position: relative; border-radius: 14px; overflow: hidden;
+      background: #1b1210; aspect-ratio: 16 / 9;
+    }
+    .viewer img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .viewer .img-missing { color: var(--yellow); }
+    .viewer button {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 40px; height: 40px; border-radius: 50%; border: 0;
+      background: rgba(255,199,44,.9); color: var(--red); font-weight: 900; font-size: 1.1rem; cursor: pointer;
+    }
+    .viewer .v-prev { left: 10px; }
+    .viewer .v-next { right: 10px; }
+    .viewer .v-count {
+      position: absolute; bottom: 8px; right: 10px;
+      background: rgba(0,0,0,.65); color: #fff; font-size: .8rem; padding: 2px 10px; border-radius: 999px;
+    }
+    .thumbs { display: flex; gap: 8px; overflow-x: auto; padding: 10px 2px 4px; }
+    .thumbs button {
+      position: relative; flex: 0 0 96px; aspect-ratio: 16 / 9;
+      border-radius: 8px; overflow: hidden; padding: 0; cursor: pointer;
+      border: 3px solid transparent; background: #e8d5a8;
+    }
+    .thumbs button.active { border-color: var(--red); }
+    .thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumbs .img-missing { font-size: .7rem; }
+    .thumbs .img-missing span { font-size: 1.1rem; }
+
     footer {
       position: relative; z-index: 1;
       text-align: center; padding: 32px 16px;
@@ -245,9 +484,14 @@
     footer strong { color: var(--yellow); }
 
     @media (max-width: 560px) {
+      nav { padding: 10px 12px; }
+      nav .brand .brand-text { display: none; }
       nav ul { gap: 12px; }
-      nav ul a { font-size: .85rem; }
+      nav ul a, .drop-btn { font-size: .85rem; }
       section { padding: 70px 16px; }
+      .car-btn { display: none; }
+      .rule-grid { grid-template-columns: 1fr; }
+      .dlg-body { padding: 16px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -259,10 +503,17 @@
   <div class="fall-layer" id="fallLayer" aria-hidden="true"></div>
 
   <nav id="nav">
-    <a class="brand" href="#top">🍟 麥當勞公會</a>
+    <a class="brand" href="#top">🍟<span class="brand-text"> 麥當勞公會</span></a>
     <ul>
-      <li><a href="#about">公會簡介</a></li>
+      <li class="has-drop" id="aboutDrop">
+        <button class="drop-btn" type="button" aria-expanded="false" aria-controls="aboutMenu">公會簡介 <span class="caret">▼</span></button>
+        <ul class="dropdown" id="aboutMenu">
+          <li><a href="#about">🍔 公會簡介</a></li>
+          <li><a href="#rules">📜 公會規章</a></li>
+        </ul>
+      </li>
       <li><a href="#menu">成員菜單</a></li>
+      <li><a href="#events">活動紀錄</a></li>
       <li><a href="#recruit">加入我們</a></li>
     </ul>
   </nav>
@@ -305,6 +556,110 @@
         <h2>今日菜單・成員介紹</h2>
       </div>
       <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <section class="events" id="events">
+    <div class="wrap">
+      <div class="section-title reveal">
+        <small>EVENTS</small>
+        <h2>活動紀錄</h2>
+      </div>
+      <div class="carousel reveal">
+        <button class="car-btn prev" type="button" aria-label="上一個活動">◀</button>
+        <div class="event-track" id="eventTrack"></div>
+        <button class="car-btn next" type="button" aria-label="下一個活動">▶</button>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="event-dialog" id="eventDialog" aria-labelledby="dlgTitle">
+    <div class="dlg-head">
+      <h3 id="dlgTitle"></h3>
+      <button class="dlg-close" type="button" aria-label="關閉">✕</button>
+    </div>
+    <div class="dlg-body" id="dlgBody"></div>
+  </dialog>
+
+  <section class="rules" id="rules">
+    <div class="wrap">
+      <div class="section-title reveal">
+        <small>GUILD RULES</small>
+        <h2>公會規章</h2>
+      </div>
+      <p class="rules-intro reveal">為維持公會良好的遊戲環境與成員間的相處品質，請所有公會成員共同遵守以下規範。</p>
+
+      <div class="rule-tabs reveal" role="tablist">
+        <button class="rule-tab" type="button" role="tab" aria-selected="true" aria-controls="rulesMember" id="tabMember">🍔 成員規章</button>
+        <button class="rule-tab" type="button" role="tab" aria-selected="false" aria-controls="rulesVisitor" id="tabVisitor">👋 訪客規章</button>
+      </div>
+
+      <div class="rule-panel" id="rulesMember" role="tabpanel" aria-labelledby="tabMember">
+        <div class="rule-grid">
+          <article class="rule-card reveal">
+            <h3><span class="no">一</span>公會基本規範</h3>
+            <ul>
+              <li>請尊重公會內所有成員，友善交流、互相協助。</li>
+              <li>禁止鬧事、挑釁、惡意找人麻煩。</li>
+            </ul>
+          </article>
+          <article class="rule-card reveal">
+            <h3><span class="no">二</span>遊戲行為規範</h3>
+            <ul>
+              <li>禁止搶圖、惡意干擾其他玩家練功。</li>
+              <li>若發生地圖歸屬或練功問題，請保持冷靜，避免與對方爭吵。</li>
+              <li>禁止利用公會名義對其他玩家進行挑釁、威脅或報復。</li>
+              <li>禁止使用外掛、腳本、非法程式或其他違反遊戲規章之行為。</li>
+            </ul>
+          </article>
+          <article class="rule-card reveal">
+            <h3><span class="no">三</span>公會聊天與社交</h3>
+            <ul>
+              <li>請保持基本禮貌，避免使用侮辱、歧視或人身攻擊性言語。</li>
+              <li>可以開玩笑，但請注意分寸；若對方表示不舒服，請立即停止。</li>
+              <li>公會內發生意見不合時，請理性溝通，不得演變成爭吵。</li>
+              <li>不強迫成員參加活動、組隊或提供遊戲資源。</li>
+              <li>尊重每位成員的遊戲方式，不因等級、裝備、職業或課金程度嘲諷他人。</li>
+            </ul>
+          </article>
+          <article class="rule-card reveal">
+            <h3><span class="no">四</span>交易與物品</h3>
+            <ul>
+              <li>公會內交易請雙方自行確認價格、數量及交易內容。</li>
+              <li>禁止利用公會成員的信任進行詐騙、騙取物品或遊戲幣。</li>
+            </ul>
+          </article>
+          <article class="rule-card reveal">
+            <h3><span class="no">五</span>其他</h3>
+            <ul>
+              <li>加入公會即代表同意遵守公會規章。</li>
+              <li>規章未列明之事項，由會長及管理員依實際情況判斷處理。</li>
+              <li>公會規章可能依遊戲環境及公會需求進行調整，修改後將另行公告。</li>
+              <li>希望大家以遊戲開心、互相尊重為前提，共同維持良好的公會環境。</li>
+            </ul>
+          </article>
+          <article class="rule-card note reveal">
+            <h3><span class="no">六</span>注意</h3>
+            <p>會長只會耍廢 😴</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="rule-panel" id="rulesVisitor" role="tabpanel" aria-labelledby="tabVisitor" hidden>
+        <div class="visitor-box">
+          <p class="welcome">歡迎各位玩家來到本公會交流，但即使是訪客，也請遵守以下基本規範：</p>
+          <div class="rule-card">
+            <ul>
+              <li>禁止鬧事、挑釁或故意製造衝突。</li>
+              <li>禁止爭吵、辱罵、人身攻擊或惡意挑釁他人。</li>
+              <li>請尊重公會成員及其他訪客。</li>
+              <li>如與其他玩家發生爭議，請自行私下處理，不得將爭議帶入本公會。</li>
+              <li>若訪客多次違反規定，管理員有權將其請離公會。</li>
+              <li>來者是客，請保持基本禮貌；大家開心遊戲即可。</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -464,6 +819,167 @@
         </div>`;
       cards.appendChild(el);
     });
+
+    // ================= 活動紀錄 =================
+    // 新增活動只要在這裡多加一筆（新的活動放最上面，會排在最左邊）
+    //   title  ：活動名稱
+    //   tag    ：首圖左上角的小標籤
+    //   date   ：活動日期（不填就留 ""）
+    //   cover  ：首圖路徑
+    //   summary：卡片上的簡短介紹
+    //   detail ：點開後的完整介紹（可換行）
+    //   youtube：YouTube 影片網址，直接貼網址列的網址即可（沒有就留 ""）
+    //   photos ：活動截圖路徑清單（沒有就留 []）
+    const events = [
+      {
+        title: "第一屆忍耐大賽",
+        tag: "第一屆",
+        date: "",
+        cover: "images/events/endurance-1/cover.png",
+        summary: "麥當勞公會第一屆忍耐大賽！誰能撐到最後一刻？",
+        detail: "麥當勞公會第一屆忍耐大賽！\n比的不是等級和裝備，而是誰能忍到最後。\n精彩畫面與完整影片都在這裡。",
+        youtube: "",
+        photos: [
+          "images/events/endurance-1/1.png",
+          "images/events/endurance-1/2.png",
+          "images/events/endurance-1/3.png"
+        ]
+      }
+    ];
+
+    // 圖片讀不到時（還沒上傳），顯示「待上傳」的提示
+    const missingBox = label => `<div class="img-missing"><div><span>🍟</span>${label}</div></div>`;
+    const safeImg = (src, alt, label) =>
+      `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.outerHTML=missingBox('${label}')">`;
+
+    // 從各種 YouTube 網址抓出影片 ID（watch?v=、youtu.be、shorts、live 都可以）
+    function youtubeId(url) {
+      if (!url) return "";
+      const m = url.match(/(?:youtu\.be\/|[?&]v=|\/shorts\/|\/live\/|\/embed\/)([\w-]{11})/);
+      return m ? m[1] : "";
+    }
+
+    const track = document.getElementById("eventTrack");
+    events.forEach((ev, i) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "event-card";
+      card.innerHTML = `
+        <div class="event-cover">
+          ${safeImg(ev.cover, ev.title + " 首圖", "首圖待上傳")}
+          ${ev.tag ? `<span class="ep">${ev.tag}</span>` : ""}
+          ${youtubeId(ev.youtube) ? `<span class="yt-badge">▶ 有影片</span>` : ""}
+        </div>
+        <div class="event-body">
+          ${ev.date ? `<span class="date">📅 ${ev.date}</span>` : ""}
+          <h3>${ev.title}</h3>
+          <p>${ev.summary}</p>
+          <span class="more">查看活動紀錄 →</span>
+        </div>`;
+      card.addEventListener("click", () => openEvent(i));
+      track.appendChild(card);
+    });
+    // 最後一張：下一場活動預告
+    track.insertAdjacentHTML("beforeend", `
+      <div class="event-card soon">
+        <div class="event-body">
+          <span>🍔</span>
+          <h3>下一場活動籌備中…</h3>
+          <p>敬請期待，或在公會裡許願！</p>
+        </div>
+      </div>`);
+
+    // 左右箭頭
+    const prevBtn = document.querySelector(".car-btn.prev");
+    const nextBtn = document.querySelector(".car-btn.next");
+    const step = () => (track.querySelector(".event-card")?.offsetWidth || 300) + 24;
+    prevBtn.addEventListener("click", () => track.scrollBy({ left: -step() }));
+    nextBtn.addEventListener("click", () => track.scrollBy({ left: step() }));
+    function updateArrows() {
+      prevBtn.disabled = track.scrollLeft <= 4;
+      nextBtn.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+    }
+    track.addEventListener("scroll", updateArrows, { passive: true });
+    addEventListener("resize", updateArrows);
+    updateArrows();
+
+    // 活動詳細視窗
+    const dialog = document.getElementById("eventDialog");
+    const dlgBody = document.getElementById("dlgBody");
+    function openEvent(i) {
+      const ev = events[i];
+      const vid = youtubeId(ev.youtube);
+      document.getElementById("dlgTitle").textContent = ev.title;
+      dlgBody.innerHTML = `
+        ${ev.date ? `<div class="dlg-meta">📅 ${ev.date}</div>` : ""}
+        <div class="dlg-desc">${ev.detail || ev.summary}</div>
+        <div>
+          <h4>🎬 活動影片</h4>
+          ${vid
+            ? `<div class="video-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${vid}" title="${ev.title} 影片"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+               <a class="yt-link" href="${ev.youtube}" target="_blank" rel="noopener">在 YouTube 觀看 ↗</a>`
+            : `<p class="dlg-meta">影片即將上架，敬請期待！</p>`}
+        </div>
+        ${ev.photos.length ? `
+        <div>
+          <h4>📸 活動截圖</h4>
+          <div class="viewer">
+            <div id="viewerImg"></div>
+            ${ev.photos.length > 1 ? `<button class="v-prev" type="button" aria-label="上一張">◀</button>
+            <button class="v-next" type="button" aria-label="下一張">▶</button>` : ""}
+            <span class="v-count" id="viewerCount"></span>
+          </div>
+          <div class="thumbs">
+            ${ev.photos.map((p, n) => `<button type="button" data-n="${n}" aria-label="第 ${n + 1} 張">${safeImg(p, "", "待上傳")}</button>`).join("")}
+          </div>
+        </div>` : ""}`;
+
+      let cur = 0;
+      const show = n => {
+        cur = (n + ev.photos.length) % ev.photos.length;
+        document.getElementById("viewerImg").innerHTML =
+          safeImg(ev.photos[cur], `${ev.title} 截圖 ${cur + 1}`, "截圖待上傳");
+        document.getElementById("viewerCount").textContent = `${cur + 1} / ${ev.photos.length}`;
+        dlgBody.querySelectorAll(".thumbs button").forEach(b => b.classList.toggle("active", +b.dataset.n === cur));
+      };
+      if (ev.photos.length) {
+        show(0);
+        dlgBody.querySelector(".v-prev")?.addEventListener("click", () => show(cur - 1));
+        dlgBody.querySelector(".v-next")?.addEventListener("click", () => show(cur + 1));
+        dlgBody.querySelectorAll(".thumbs button").forEach(b => b.addEventListener("click", () => show(+b.dataset.n)));
+      }
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    }
+    // 關閉時清空內容，影片也會跟著停止
+    dialog.querySelector(".dlg-close").addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener("close", () => { dlgBody.innerHTML = ""; });
+
+    // ================= 導覽列下拉選單 =================
+    const aboutDrop = document.getElementById("aboutDrop");
+    const dropBtn = aboutDrop.querySelector(".drop-btn");
+    const setDrop = open => {
+      aboutDrop.classList.toggle("open", open);
+      dropBtn.setAttribute("aria-expanded", open);
+    };
+    dropBtn.addEventListener("click", e => { e.stopPropagation(); setDrop(!aboutDrop.classList.contains("open")); });
+    aboutDrop.querySelectorAll(".dropdown a").forEach(a => a.addEventListener("click", () => setDrop(false)));
+    document.addEventListener("click", e => { if (!aboutDrop.contains(e.target)) setDrop(false); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") setDrop(false); });
+
+    // ================= 規章分頁（成員 / 訪客） =================
+    const tabs = document.querySelectorAll(".rule-tab");
+    tabs.forEach(tab => tab.addEventListener("click", () => {
+      tabs.forEach(t => {
+        const on = t === tab;
+        t.setAttribute("aria-selected", on);
+        document.getElementById(t.getAttribute("aria-controls")).hidden = !on;
+      });
+      // 切換到的分頁裡如果有還沒淡入的卡片，直接顯示
+      document.querySelectorAll("#" + tab.getAttribute("aria-controls") + " .reveal").forEach(el => el.classList.add("in"));
+    }));
 
     // 卡片滑鼠傾斜
     document.querySelectorAll(".card").forEach(card => {
